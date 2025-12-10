@@ -2,7 +2,7 @@
 /**Esta classe gere as operações realizadas sobre uma base de dados de uma
 Loja virtual.*/
 
-class Estagio {
+class Estagios {
   /**Variável da classe que permite guardar a ligação à base de dados.*/
   var $conn;
 
@@ -45,13 +45,13 @@ class Estagio {
 efectuar toda uma série de operações sobre a tabela de produtos, nomeadamente
 operações de introdução, remoção, consulta e alteração de produtos.*/
 
-class Aluno extends Estagio {
+class Estagio extends Estagios {
  /**Esta variável da classe é responsável pelas operações directas na Base de dados.*/
  var $db_estagio;
  /**Inicializa os produtos da loja, e as variáveis da classe.*/
  
  function AlunosEstagio() {
-    $this->db_estagio = new Estagio;
+    $this->db_estagio = new Estagios;
 	$this->db_estagio->ligarBD(); 
  }
  

@@ -1,0 +1,1 @@
+Dentro da pasta principal correr docker-init e executar os passos indicados.

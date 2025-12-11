@@ -52,69 +52,64 @@ class Estagio extends Estagios {
  
  function AlunosEstagio() {
     $this->db_estagio = new Estagios;
-	  $this->db_estagio->ligarBD(); 
+	$this->db_estagio->ligarBD(); 
  }
  
- /**Permite a introdução de um novo produto na base de dados.
- @param codigo O codigo do novo produto a introduzir.
- @param designação A designação do novo produto a introduzir.
- @param preco O preço do novo produto a introduzir.*/
+
  
- function novoEstagio($estabelecimento_empresa_id, $estabelecimento_id, $aluno_id, $formador_id) {
-    $sql = "INSERT INTO estagio VALUES ($estabelecimento_empresa_id, $estabelecimento_id, $aluno_id)";
-    $this->db_estagio->executarSQL($sql);
- }
- 
-	/**Apaga um determinado produto da base de dados.
-	 @param codigo O codigo do produto a apagar.*/
-	function apagarEstagio($estabelecimento_empresa_id, $estabelecimento_id, $aluno_id) {
-	$sql = "DELETE FROM estagio WHERE estabelecimento_empresa_id = $estabelecimento_empresa_id AND estabelecimento_id = $estabelecimento_id AND aluno = $aluno_id";
-	$this->db_estagio->executarSQL($sql);
+	function novoEstagio($empresa_id, $estabelecimento_id, $aluno_id, $formador_id) {
+		$sql = "INSERT INTO estagio (estabelecimento_empresa_id, estabalecimento_id, aluno_id, formador_id) VALUES ($empresa_id, $estabelecimento_id, $aluno_id, $formador_id)";
+		$this->db_estagio->executarSQL($sql);
 	}
+ 
+	function apagarEstagio($estabelecimento_empresa_id, $estabelecimento_id, $aluno_id) {
+		$sql = "DELETE FROM estagio WHERE estabelecimento_empresa_id = $estabelecimento_empresa_id AND estabelecimento_id = $estabelecimento_id AND aluno = $aluno_id";
+		$this->db_estagio->executarSQL($sql);
+	}
+
+	function registarAluno($utilizador, $turma) {
+		$sql = "INSERT INTO aluno (turma_id, utilizador_id) VALUES ($turma, $utilizador)"
+		$this->db_estagio->executarSQL($sql);
+	}
+	function listarEstagios() {
+    echo "<table border=1 cellpadding=0 cellspacing=0>\n";
+    $result_set = $this->db_loja->executarSQL("SELECT * FROM estagio");
+    $tuplos = $this->db_loja->numeroTuplos("estagio");
+    for($registo=0; $registo<$tuplos; $registo++) {
+      echo "<tr>\n";
+      $row = mysqli_fetch_assoc($result_set);
+      $this->escreveProduto($row["codigo"], $row["designacao"], $row["preco"]);
+      echo "</tr>\n";    }
+    echo "</table>\n";
+  }
 
 	/**Lista todos os produtos da base de dados*/
 	function listarEmpresas() {
-	echo "<table border=1 cellpadding=0 cellspacing=0>\n";
-	$result_set = $this->db_estagio->executarSQL("SELECT * FROM empresa");
-	$tuplos = $this->db_estagio->numeroTuplos("empresa");
-	for($registo=0; $registo<$tuplos; $registo++) {
-		echo "<tr>\n";
-		$row = mysqli_fetch_assoc($result_set);
-		$this->escreveProduto($row["codigo"], $row["designacao"], $row["preco"]);
-		echo "</tr>\n";    }
-	echo "</table>\n";
-	}
-  
-	/**Escreve os detalhes de um determinado produto
-	 @param codigo O codigo do produto
-	@param designacao A designacao do produto
-	@param preco O preço do produto*/
-	function escreveProduto($codigo, $designacao, $preco) {
-		printf("<td>$codigo</td><td>$designacao</td><td>$preco</td><form action=\"apagar.php\" method=post><td><input type=hidden name=codigo value=$codigo><input type=submit value=Apagar></td></form><form action=\"alterar.php\" method=post><td><input type=hidden name=codigo value=$codigo><input type=submit value=Alterar></td></form>\n");
+		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
+		$result_set = $this->db_estagio->executarSQL("SELECT e.firma, d.num_estagios 
+		FROM empresa e
+		INNER JOIN disponibilidade d ON e.empresa_id = d.empresa_id");
+		$tuplos = mysqli_num_rows($result_set); #só vão aparecer as linhas do resultado do sql
+		for($registo=0; $registo<$tuplos; $registo++) {
+			echo "<tr>\n";
+			$row = mysqli_fetch_assoc($result_set);
+			$this->escreveProduto($row["firma"], $row["num_estagios"]); #posso fazer isto?
+			echo "</tr>\n";    }
+		echo "</table>\n";
 	}
 
-  /**Devolve o campo designacao de um determinado produto
-  @param codigo O codigo do produto
-  @return A designacao de um determinado produto*/
-  function devolveDesignacao($codigo) {
-  $sql="SELECT designacao FROM produto WHERE codigo=$codigo";
-  $result_set = $this->db_estagio->executarSQL($sql);
-  $row = mysqli_fetch_assoc($result_set);
-  return $row["designacao"];
-  }
+	function escreveEmpresa($firma, $num_estagios) {
+		printf("<td>$firma</td><td>$num_estagios</td><form action=\"apagar.php\" method=post><td><input type=hidden name=firma value=$firma><input type=submit value=Apagar></td></form><form action=\"alterar.php\" method=post><td><input type=hidden name=firma value=$firma><input type=submit value=Alterar></td></form>\n");
+	}
 
-  /**Devolve o campo preco de um determinado produto
-  @param codigo O codigo do produto
-  @return O preco de um determinado produto*/
-  function devolvePreco($codigo) {
-      $sql="SELECT preco FROM produto WHERE codigo=$codigo";
-	  $result_set = $this->db_estagio->executarSQL($sql);
-	  $row = mysqli_fetch_assoc($result_set);
-	  return $row["preco"];
+  function atribuirNota($nota_emp, $nota_esc, $nota_rel, $nota_proc, $nota_final) {
+	$sql = "INSERT INTO estagio (nota_empresa, nota_escola, nota_relatorio, nota_procura, nota_final) VALUES ($nota_emp, $nota_esc, $nota_proc, $nota_final)";
+	$this->db_estagio->executarSQL($sql)
+
   }
   
   /**Corta a ligação à base de dados*/
-  function fecharBDProdutos() {
+  function fecharBDEstagios() {
     $this->db_estagio->fecharBD();
   }
 }

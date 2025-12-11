@@ -10,7 +10,7 @@ class Estagios {
    @return Um valor indicando qual o resultado da ligação à base de dados.*/
    function ligarBD() {
       #$this->conn = mysqli_connect("localhost", "root", "", "yloja");
-      $this->conn = mysqli_connect("mariadb", "root", "maria", "yloja");
+      $this->conn = mysqli_connect("mariadb", "root", "maria", "SIEstagios");
 	  if(!$this->conn){
 		return -1;
 	  }
@@ -48,7 +48,6 @@ operações de introdução, remoção, consulta e alteração de produtos.*/
 class Estagio extends Estagios {
  /**Esta variável da classe é responsável pelas operações directas na Base de dados.*/
 	var $db_estagio;
- /**Inicializa os produtos da loja, e as variáveis da classe.*/
  
 	function AlunosEstagio() {
 		$this->db_estagio = new Estagios;

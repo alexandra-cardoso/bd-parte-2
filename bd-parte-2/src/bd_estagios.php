@@ -47,15 +47,13 @@ operações de introdução, remoção, consulta e alteração de produtos.*/
 
 class Estagio extends Estagios {
  /**Esta variável da classe é responsável pelas operações directas na Base de dados.*/
- var $db_estagio;
+	var $db_estagio;
  /**Inicializa os produtos da loja, e as variáveis da classe.*/
  
- function AlunosEstagio() {
-    $this->db_estagio = new Estagios;
-	$this->db_estagio->ligarBD(); 
- }
- 
-
+	function AlunosEstagio() {
+		$this->db_estagio = new Estagios;
+		$this->db_estagio->ligarBD(); 
+	}
  
 	function novoEstagio($empresa_id, $estabelecimento_id, $aluno_id, $formador_id) {
 		$sql = "INSERT INTO estagio (estabelecimento_empresa_id, estabalecimento_id, aluno_id, formador_id) VALUES ($empresa_id, $estabelecimento_id, $aluno_id, $formador_id)";

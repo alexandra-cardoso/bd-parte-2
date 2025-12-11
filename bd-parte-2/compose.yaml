@@ -8,7 +8,7 @@ services:
     develop:
       watch:
         - action: sync
-          path: .
+          path: ./src
           target: /var/www/html
 
   mariadb:

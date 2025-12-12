@@ -9,7 +9,6 @@ class Estagios {
   /**Função para ligar à BD da Loja
    @return Um valor indicando qual o resultado da ligação à base de dados.*/
    function ligarBD() {
-      #$this->conn = mysqli_connect("localhost", "root", "", "yloja");
       $this->conn = mysqli_connect("mariadb", "root", "maria", "SIEstagios");
 	  if(!$this->conn){
 		return -1;
@@ -49,7 +48,7 @@ class Estagio extends Estagios {
  /**Esta variável da classe é responsável pelas operações directas na Base de dados.*/
 	var $db_estagio;
  
-	function AlunosEstagio() {
+	function Estagio() {
 		$this->db_estagio = new Estagios;
 		$this->db_estagio->ligarBD(); 
 	}
@@ -68,20 +67,20 @@ class Estagio extends Estagios {
 		$sql = "INSERT INTO aluno (turma_id, utilizador_id) VALUES ($turma, $utilizador)"
 		$this->db_estagio->executarSQL($sql);
 	}
-	function listarEstagios() {
-    echo "<table border=1 cellpadding=0 cellspacing=0>\n";
-    $result_set = $this->db_loja->executarSQL("SELECT * FROM estagio");
-    $tuplos = $this->db_loja->numeroTuplos("estagio");
-    for($registo=0; $registo<$tuplos; $registo++) {
-      echo "<tr>\n";
-      $row = mysqli_fetch_assoc($result_set);
-      $this->escreveProduto($row["codigo"], $row["designacao"], $row["preco"]);
-      echo "</tr>\n";    }
-    echo "</table>\n";
-  }
 
-	/**Lista todos os produtos da base de dados*/
-	function listarEmpresas() {
+	function listarEstagios() {
+		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
+		$result_set = $this->db_loja->executarSQL("SELECT * FROM estagio");
+		$tuplos = $this->db_loja->numeroTuplos("estagio");
+		for($registo=0; $registo<$tuplos; $registo++) {
+			echo "<tr>\n";
+			$row = mysqli_fetch_assoc($result_set);
+			$this->escreveProduto($row["codigo"], $row["designacao"], $row["preco"]);
+			echo "</tr>\n";    }
+		echo "</table>\n";
+	}
+
+	function listarEmpresasComDisponibilidade() {
 		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
 		$result_set = $this->db_estagio->executarSQL("SELECT e.firma, d.num_estagios 
 		FROM empresa e
@@ -90,19 +89,61 @@ class Estagio extends Estagios {
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveProduto($row["firma"], $row["num_estagios"]); #posso fazer isto?
+			$this->escreveProduto($row["firma"], $row["num_estagios"]);
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
 
-	function escreveEmpresa($firma, $num_estagios) {
+	function listarEmpresas() { //escreve as empresas sem contar com a disponibilidade
+		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
+		$result_set = $this->db_estagio->executarSQL("SELECT * FROM empresa");
+		$tuplos = $this->db_estagio->numeroTuplos("empresa");
+		for($registo=0; $registo<$tuplos; $registo++) {
+			echo "<tr>\n";
+			$row = mysqli_fetch_assoc($result_set);
+			$this->escreveProduto($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
+			echo "</tr>\n";    }
+		echo "</table>\n";
+	}
+
+	function listarEmpresasPorRamo($ramo_atividade) {
+		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
+		$result_set = $this->db_estagio->executarSQL("SELECT * FROM produto WHERE ramo_atividade like '%$ramo_atividade%'");
+		$tuplos = mysqli_num_rows($result_set);
+
+		for($registo=0; $registo<$tuplos; $registo++) {
+			echo "<tr>\n";
+			$row = mysqli_fetch_assoc($result_set);
+			$this->escreveEmpresa($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
+			echo "</tr>\n";    }
+		echo "</table>\n";
+	}
+
+	function listarEmpresasPorLocalidade($localidade) {
+		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
+		$result_set = $this->db_estagio->executarSQL("SELECT * FROM produto WHERE localidade like '%$localidade%'");
+		$tuplos = mysqli_num_rows($result_set);
+
+		for($registo=0; $registo<$tuplos; $registo++) {
+			echo "<tr>\n";
+			$row = mysqli_fetch_assoc($result_set);
+			$this->escreveProduto($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
+			echo "</tr>\n";    }
+		echo "</table>\n";
+	}
+
+	function escreveEmpresa($firma, $tipo, $localidade, $telefone, $website) {
+		printf("<td>$firma</td><td>$tipo</td><td>$localidade</td><td>$telefone</td><td>$website</td>\n");
+	}
+
+	function escreveEmpresaComDisponibilidade($firma, $num_estagios) {
 		printf("<td>$firma</td><td>$num_estagios</td><form action=\"apagar.php\" method=post><td><input type=hidden name=firma value=$firma><input type=submit value=Apagar></td></form><form action=\"alterar.php\" method=post><td><input type=hidden name=firma value=$firma><input type=submit value=Alterar></td></form>\n");
 	}
 
-  function atribuirNota($nota_emp, $nota_esc, $nota_rel, $nota_proc, $nota_final) {
+  function atribuirNota($nota_emp, $nota_esc, $nota_rel, $nota_proc) {
+	$nota_final = ($nota_emp + $nota_esc + $nota_rel + $nota_proc)/4; //calcula a média
 	$sql = "INSERT INTO estagio (nota_empresa, nota_escola, nota_relatorio, nota_procura, nota_final) VALUES ($nota_emp, $nota_esc, $nota_proc, $nota_final)";
 	$this->db_estagio->executarSQL($sql)
-
   }
   
   /**Corta a ligação à base de dados*/

@@ -40,75 +40,78 @@ class Estagios {
 }
 
 
-/**Esta classe implementa a gestão de produtos na base de dados da Loja. Permite
+/**Esta classe implementa a gestão de produtos na base de dados dos Estagios. Permite
 efectuar toda uma série de operações sobre a tabela de produtos, nomeadamente
-operações de introdução, remoção, consulta e alteração de produtos.*/
+operações de introdução, remoção, consulta e alteração de estagios.*/
 
 class Estagio extends Estagios {
  /**Esta variável da classe é responsável pelas operações directas na Base de dados.*/
-	var $db_estagio;
+	var $db_estagios;
  
 	function Estagio() {
-		$this->db_estagio = new Estagios;
-		$this->db_estagio->ligarBD(); 
+		$this->db_estagios = new Estagios;
+		$this->db_estagios->ligarBD(); 
 	}
  
 	function novoEstagio($empresa_id, $estabelecimento_id, $aluno_id, $formador_id) {
 		$sql = "INSERT INTO estagio (estabelecimento_empresa_id, estabalecimento_id, aluno_id, formador_id) VALUES ($empresa_id, $estabelecimento_id, $aluno_id, $formador_id)";
-		$this->db_estagio->executarSQL($sql);
+		$this->db_estagios->executarSQL($sql);
 	}
  
 	function apagarEstagio($estabelecimento_empresa_id, $estabelecimento_id, $aluno_id) {
 		$sql = "DELETE FROM estagio WHERE estabelecimento_empresa_id = $estabelecimento_empresa_id AND estabelecimento_id = $estabelecimento_id AND aluno = $aluno_id";
-		$this->db_estagio->executarSQL($sql);
+		$this->db_estagios->executarSQL($sql);
 	}
 
 	function registarAluno($utilizador, $turma) {
-		$sql = "INSERT INTO aluno (turma_id, utilizador_id) VALUES ($turma, $utilizador)"
-		$this->db_estagio->executarSQL($sql);
+		$sql = "INSERT INTO aluno (turma_id, utilizador_id) VALUES ($turma, $utilizador)";
+		$this->db_estagios->executarSQL($sql);
 	}
 
 	function listarEstagios() {
-		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
-		$result_set = $this->db_loja->executarSQL("SELECT * FROM estagio");
-		$tuplos = $this->db_loja->numeroTuplos("estagio");
+		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
+		$result_set = $this->db_estagios->executarSQL("SELECT * FROM estagio");
+		$tuplos = $this->db_estagios->numeroTuplos("estagio");
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveProduto($row["codigo"], $row["designacao"], $row["preco"]);
+			$this->escreveEstagio($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
 
 	function listarEmpresasComDisponibilidade() {
-		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
-		$result_set = $this->db_estagio->executarSQL("SELECT e.firma, d.num_estagios 
+		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
+		$result_set = $this->db_estagios->executarSQL("SELECT e.firma, d.num_estagios 
 		FROM empresa e
 		INNER JOIN disponibilidade d ON e.empresa_id = d.empresa_id");
 		$tuplos = mysqli_num_rows($result_set); #só vão aparecer as linhas do resultado do sql
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveProduto($row["firma"], $row["num_estagios"]);
+			$this->escreveEmpresa($row["firma"], $row["num_estagios"]);
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
 
 	function listarEmpresas() { //escreve as empresas sem contar com a disponibilidade
-		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
-		$result_set = $this->db_estagio->executarSQL("SELECT * FROM empresa");
-		$tuplos = $this->db_estagio->numeroTuplos("empresa");
+		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
+		$result_set = $this->db_estagios->executarSQL("SELECT * FROM empresa");
+		$tuplos = $this->db_estagios->numeroTuplos("empresa");
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveProduto($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
+			$this->escreveEmpresa($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
 
-	function listarEmpresasPorRamo($ramo_atividade) {
-		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
-		$result_set = $this->db_estagio->executarSQL("SELECT * FROM produto WHERE ramo_atividade like '%$ramo_atividade%'");
+	function listarEmpresasPorRamo($ramo_atividade) { // o query seleciona apenas as empresas daquele ramo de atividade 
+		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
+		$result_set = $this->db_estagios->executarSQL("SELECT * FROM ramo_atividade ra 
+		inner join trabalha t on t.ramo_atividade_id = ra.ramo_atividade_id
+		inner join empresa e on e.empresa_id = t.empresa_id
+		WHERE ra.descricao like '%$ramo_atividade%'");
 		$tuplos = mysqli_num_rows($result_set);
 
 		for($registo=0; $registo<$tuplos; $registo++) {
@@ -120,20 +123,29 @@ class Estagio extends Estagios {
 	}
 
 	function listarEmpresasPorLocalidade($localidade) {
-		echo "<table border=1 cellpadding=0 cellspacing=0>\n";
-		$result_set = $this->db_estagio->executarSQL("SELECT * FROM produto WHERE localidade like '%$localidade%'");
+		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
+		$result_set = $this->db_estagios->executarSQL("SELECT * FROM empresa WHERE localidade like '%$localidade%'");
 		$tuplos = mysqli_num_rows($result_set);
 
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveProduto($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
+			$this->escreveEmpresa($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
 
 	function escreveEmpresa($firma, $tipo, $localidade, $telefone, $website) {
 		printf("<td>$firma</td><td>$tipo</td><td>$localidade</td><td>$telefone</td><td>$website</td>\n");
+	}
+	
+	function escreveEstagio($nome_estab, $morada_estab, $localidade_estab, $nome_resp, $cargo_resp, $telefone_resp, $email_resp, $nome_emp, $ramo_emp, $morada_emp, $local_emp, $telefone_emp) {
+		printf("<td>$nome_estab</td><td>$morada_estab</td><td>$localidade_estab</td><td>$nome_resp</td><td>$cargo_resp</td><td>$telefone_resp</td><td>$email_resp</td><td>$nome_emp</td><td>$ramo_emp</td><td>$morada_emp</td><td>$local_emp</td><td>$telefone_emp</td>");
+		$this->escreveTransportes();
+	}
+
+	function escreveTransportes() {
+
 	}
 
 	function escreveEmpresaComDisponibilidade($firma, $num_estagios) {
@@ -143,12 +155,12 @@ class Estagio extends Estagios {
   function atribuirNota($nota_emp, $nota_esc, $nota_rel, $nota_proc) {
 	$nota_final = ($nota_emp + $nota_esc + $nota_rel + $nota_proc)/4; //calcula a média
 	$sql = "INSERT INTO estagio (nota_empresa, nota_escola, nota_relatorio, nota_procura, nota_final) VALUES ($nota_emp, $nota_esc, $nota_proc, $nota_final)";
-	$this->db_estagio->executarSQL($sql)
+	$this->db_estagios->executarSQL($sql);
   }
   
   /**Corta a ligação à base de dados*/
   function fecharBDEstagios() {
-    $this->db_estagio->fecharBD();
+    $this->db_estagios->fecharBD();
   }
 }
 ?>

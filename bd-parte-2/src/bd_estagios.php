@@ -80,6 +80,37 @@ class Estagio extends Estagios {
 		echo "</table>\n";
 	}
 
+	function listarEstagiosDaEmpresa($id) { //os left joins neste query servem para ligar os dados todos das tabelas
+		echo "<table border = 1 cellpadding = 5 cellspacing=5>\n";
+		$sql = "SELECT est.nome_comercial, est.morada, est.localidade as loc_est, resp.nome as nome_resp, resp.cargo, resp.telemovel as tel_resp, resp.email as email_resp, emp.firma, emp.morada_sede, emp.localidade as loc_emp, emp.telefone, ra.descricao as nome_ramo, GROUP_CONCAT(Distinct tr.meio_transporte separator ', ') as lista_transportes
+		FROM estagio o
+		inner join estabelecimento est on o.estabelecimento_id = est.estabelecimento_id
+		inner join empresa emp on est.empresa_id = emp.empresa_id
+		
+		left join responsavel resp on resp.responsavel_id = est.responsavel_id
+		
+		left join trabalha t on emp.empresa_id = t.empresa_id
+		left join ramo_atividade ra on t.ramo_atividade_id = ra.ramo_atividade_id
+		
+		left join servido s on est.estabelecimento_id = s.estabelecimento_id
+		left join transporte tr on s.transporte_id = tr.transporte_id
+		
+		where emp.empresa_id = $id
+		group by est.estabelecimento_id";
+		
+		$result_set = $this->db_estagios->executarSQL($sql);
+		if($result_set) {
+			$tuplos = mysqli_num_rows($result_set);
+			for($registo = 0; $registo < $tuplos; $registo++) {
+				echo "<tr>\n";
+				$row = mysqli_fetch_assoc($result_set);
+				$this->escreveEstagio($row['nome_comercial'], $row['morada'], $row['loc_est'], $row['nome_resp'], $row['cargo'], $row['tel_resp'], $row['email_resp'], $row['firma'], $row['nome_ramo'], $row['morada_sede'], $row['loc_emp'], $row['telefone'], $row['lista_transportes']);
+				echo"</tr>\n";
+			}
+			echo "</table>\n";
+		}
+	}
+
 	function listarEmpresasComDisponibilidade() {
 		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
 		$result_set = $this->db_estagios->executarSQL("SELECT e.firma, d.num_estagios 
@@ -101,7 +132,7 @@ class Estagio extends Estagios {
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveEmpresa($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
+			$this->escreveEmpresa($row["empresa_id"], $row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
@@ -117,7 +148,7 @@ class Estagio extends Estagios {
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveEmpresa($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
+			$this->escreveEmpresa($row["empresa_id"], $row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
@@ -130,22 +161,17 @@ class Estagio extends Estagios {
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveEmpresa($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
+			$this->escreveEmpresa($row["empresa_id"], $row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
 
-	function escreveEmpresa($firma, $tipo, $localidade, $telefone, $website) {
-		printf("<td>$firma</td><td>$tipo</td><td>$localidade</td><td>$telefone</td><td>$website</td>\n");
+	function escreveEmpresa($emp_id, $firma, $tipo, $localidade, $telefone, $website) { //criámos um link no nome da empresa que liga depois à pagina que lista os estágios daquela empresa. o id da empresa não é escrito mas é usado para verificar na próxima página os estágios associados a ela
+		printf("<td><a href='estagiosNaEmpresa.php?empresa_id=$emp_id'>$firma</td><td>$tipo</td><td>$localidade</td><td>$telefone</td><td>$website</td>\n");
 	}
 	
-	function escreveEstagio($nome_estab, $morada_estab, $localidade_estab, $nome_resp, $cargo_resp, $telefone_resp, $email_resp, $nome_emp, $ramo_emp, $morada_emp, $local_emp, $telefone_emp) {
-		printf("<td>$nome_estab</td><td>$morada_estab</td><td>$localidade_estab</td><td>$nome_resp</td><td>$cargo_resp</td><td>$telefone_resp</td><td>$email_resp</td><td>$nome_emp</td><td>$ramo_emp</td><td>$morada_emp</td><td>$local_emp</td><td>$telefone_emp</td>");
-		$this->escreveTransportes();
-	}
-
-	function escreveTransportes() {
-
+	function escreveEstagio($nome_estab, $morada_estab, $localidade_estab, $nome_resp, $cargo_resp, $telefone_resp, $email_resp, $nome_emp, $ramo_emp, $morada_emp, $local_emp, $telefone_emp, $transportes) {
+		printf("<td>$nome_estab</td><td>$morada_estab</td><td>$localidade_estab</td><td>$nome_resp</td><td>$cargo_resp</td><td>$telefone_resp</td><td>$email_resp</td><td>$nome_emp</td><td>$ramo_emp</td><td>$morada_emp</td><td>$local_emp</td><td>$telefone_emp</td><td>$transportes</td>");
 	}
 
 	function escreveEmpresaComDisponibilidade($firma, $num_estagios) {

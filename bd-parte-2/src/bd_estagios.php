@@ -53,8 +53,14 @@ class Estagio extends Estagios {
 		$this->db_estagios->ligarBD(); 
 	}
  
-	function novoEstagio($empresa_id, $estabelecimento_id, $aluno_id, $formador_id) {
-		$sql = "INSERT INTO estagio (estabelecimento_empresa_id, estabalecimento_id, aluno_id, formador_id) VALUES ($empresa_id, $estabelecimento_id, $aluno_id, $formador_id)";
+	function novoEstagio($empresa_id, $estabelecimento_id, $data_inicio, $aluno_id, $formador_id) {
+		$sql = "INSERT INTO estagio (estabelecimento_empresa_id, estabelecimento_id, aluno_id, formador_id) VALUES ($empresa_id, $estabelecimento_id, $aluno_id, $formador_id)";
+		$this->db_estagios->executarSQL($sql);
+	}
+
+	function alterarEstagio($aluno_id, $old_emp, $old_est, $novo_est, $nova_emp, $nova_data) {
+		$sql = "UPDATE estagio SET estabelecimento_id = $novo_est, estabelecimento_empresa_id = $nova_emp, data_inicio = $nova_data)
+		WHERE aluno_id = $aluno_cod AND estabelecimento_empresa_id = $emp_cod AND estabelecimento_id = $est_cod";
 		$this->db_estagios->executarSQL($sql);
 	}
  
@@ -68,19 +74,22 @@ class Estagio extends Estagios {
 		$this->db_estagios->executarSQL($sql);
 	}
 
-	function listarEstagios() {
+	function listarEstagios() { //esta função vai servir para a página do administrador então fizemos joins com as empresas e estabelecimentos apenas para lhes mostrar o nome e não o id
 		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
-		$result_set = $this->db_estagios->executarSQL("SELECT * FROM estagio");
+		$result_set = $this->db_estagios->executarSQL("SELECT o.*, empresa.firma AS nome_emp, est.nome_comercial as nome_est
+		FROM estagio o
+		left join empresa on o.estabelecimento_empresa_id = empresa.empresa_id
+		left join estabelecimento est on o.estabelecimento_id = est.estabelecimento_id");
 		$tuplos = $this->db_estagios->numeroTuplos("estagio");
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveEstagio($row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
+			$this->escreveEstagio($row['nome_emp'], $row['nome_est'], $row['data_inicio'], $row['aluno_id'], $row['formador_id']); //colocar null naquilo que não queremos imprimir mas que está como atributo da fç escreveEstagio
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
 
-	function listarEstagiosDaEmpresa($id) { //os left joins neste query servem para ligar os dados todos das tabelas
+	function listarEstagiosDaEmpresa($id) { //os left joins neste query servem para ligar os dados todos das tabelas. fç chamada pelo aluno
 		echo "<table border = 1 cellpadding = 5 cellspacing=5>\n";
 		$sql = "SELECT est.nome_comercial, est.morada, est.localidade as loc_est, resp.nome as nome_resp, resp.cargo, resp.telemovel as tel_resp, resp.email as email_resp, emp.firma, emp.morada_sede, emp.localidade as loc_emp, emp.telefone, ra.descricao as nome_ramo, GROUP_CONCAT(Distinct tr.meio_transporte separator ', ') as lista_transportes
 		FROM estagio o
@@ -104,23 +113,21 @@ class Estagio extends Estagios {
 			for($registo = 0; $registo < $tuplos; $registo++) {
 				echo "<tr>\n";
 				$row = mysqli_fetch_assoc($result_set);
-				$this->escreveEstagio($row['nome_comercial'], $row['morada'], $row['loc_est'], $row['nome_resp'], $row['cargo'], $row['tel_resp'], $row['email_resp'], $row['firma'], $row['nome_ramo'], $row['morada_sede'], $row['loc_emp'], $row['telefone'], $row['lista_transportes']);
+				$this->escreveEstagioDaEmpresa($row['nome_comercial'], $row['morada'], $row['loc_est'], $row['nome_resp'], $row['cargo'], $row['tel_resp'], $row['email_resp'], $row['firma'], $row['nome_ramo'], $row['morada_sede'], $row['loc_emp'], $row['telefone'], $row['lista_transportes']);
 				echo"</tr>\n";
 			}
 			echo "</table>\n";
 		}
 	}
 
-	function listarEmpresasComDisponibilidade() {
+	function listarEstagiosFormador() { //este também é diferente porque mostra as notas. vamos mostrar as chaves primárias e as notas apenas
 		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
-		$result_set = $this->db_estagios->executarSQL("SELECT e.firma, d.num_estagios 
-		FROM empresa e
-		INNER JOIN disponibilidade d ON e.empresa_id = d.empresa_id");
-		$tuplos = mysqli_num_rows($result_set); #só vão aparecer as linhas do resultado do sql
+		$result_set = $this->db_estagios->executarSQL("SELECT * FROM estagio");
+		$tuplos = $this->db_estagios->numeroTuplos("estagio");
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveEmpresa($row["firma"], $row["num_estagios"]);
+			$this->escreveEstagioFormador($row['aluno_id'], $row['estabelecimento_empresa_id'], $row['estabelecimento_id'], $row['nota_empresa'], $row['nota_escola'], $row['nota_relatorio'], $row['nota_procura'], $row['nota_final']);
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
@@ -133,6 +140,20 @@ class Estagio extends Estagios {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
 			$this->escreveEmpresa($row["empresa_id"], $row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]);
+			echo "</tr>\n";    }
+		echo "</table>\n";
+	}
+
+	function listarEmpresasComDisponibilidade() {
+		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
+		$result_set = $this->db_estagios->executarSQL("SELECT e.firma, d.num_estagios 
+		FROM empresa e
+		INNER JOIN disponibilidade d ON e.empresa_id = d.empresa_id");
+		$tuplos = mysqli_num_rows($result_set); #só vão aparecer as linhas do resultado do sql
+		for($registo=0; $registo<$tuplos; $registo++) {
+			echo "<tr>\n";
+			$row = mysqli_fetch_assoc($result_set);
+			$this->escreveEmpresa($row["firma"], $row["num_estagios"]);
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
@@ -170,23 +191,32 @@ class Estagio extends Estagios {
 		printf("<td><a href='estagiosNaEmpresa.php?empresa_id=$emp_id'>$firma</td><td>$tipo</td><td>$localidade</td><td>$telefone</td><td>$website</td>\n");
 	}
 	
-	function escreveEstagio($nome_estab, $morada_estab, $localidade_estab, $nome_resp, $cargo_resp, $telefone_resp, $email_resp, $nome_emp, $ramo_emp, $morada_emp, $local_emp, $telefone_emp, $transportes) {
-		printf("<td>$nome_estab</td><td>$morada_estab</td><td>$localidade_estab</td><td>$nome_resp</td><td>$cargo_resp</td><td>$telefone_resp</td><td>$email_resp</td><td>$nome_emp</td><td>$ramo_emp</td><td>$morada_emp</td><td>$local_emp</td><td>$telefone_emp</td><td>$transportes</td>");
+	function escreveEstagio($id_est, $id_emp, $data_inicio, $aluno_id, $formador_id) { //este é chamado para o admin apenas. mostra os botões que permitem alterar e apagar estágios. cada estágio mostra as informações que o enunciado diz que é possível o admin alterar
+		printf("<td>Estabelecimento: $id_est</td><td>Empresa: $id_emp</td><td>Data de Início: $data_inicio</td><td>Aluno: $aluno_id</td><td> Formador: $formador_id</td><td><form action='' method=post><input type=hidden name=emp_cod value=$id_emp><input type=hidden name=est_cod value=$id_est><input type=hidden name=aluno_cod value=$aluno_id><input type=submit name=apagar value=Apagar></td></form><td><form action=\"forms_estagio.php\" method=post><input type=hidden name=aluno_cod value=$aluno_id><input type=hidden name=emp_cod value=$id_emp><input type=hidden name=est_cod value=$id_est><input type=hidden name = data_ini value =$data_inicio><input type=submit value=Alterar></td></form>\n"); //para atualizar recebo a data de inicio alem das chaves primarias
+	}
+
+	function escreveEstagioDaEmpresa($nome_estab, $morada_estab, $localidade_estab, $nome_resp, $cargo_resp, $telefone_resp, $email_resp, $nome_emp, $ramo_emp, $morada_emp, $local_emp, $telefone_emp, $transportes) { //chamado para o aluno, que vê o estagio muito detalhado
+		printf("<td>Estabelecimento: $nome_estab</td><td>$morada_estab</td><td>$localidade_estab</td><td>Responsável: $nome_resp</td><td>$cargo_resp</td><td>$telefone_resp</td><td>$email_resp</td><td>Empresa: $nome_emp</td><td>$ramo_emp</td><td>$morada_emp</td><td>$local_emp</td><td>$telefone_emp</td><td>Transportes: $transportes</td>\n");
+	}
+
+	function escreveEstagioFormador($aluno, $empresa, $estabelecimento, $n_empresa, $n_escola, $n_relatorio, $n_procura, $n_final) { //chamado para o formador, que vê as notas e chaves primárias
+		printf("<td>ID do Aluno: $aluno</td><td>ID da Empresa: $empresa</td><td>ID do Estabelecimento: $estabelecimento</td><td>Nota da Empresa: $n_empresa</td><td>Nota da Escola: $n_escola</td><td>Nota do Relatório: $n_relatorio</td><td>Nota da Procura: $n_procura</td><td>Nota Final: $n_final</td><td><form action='registarNotas.php' method=post><input type=hidden name=emp_cod value=$empresa><input type=hidden name=est_cod value=$estabelecimento><input type=hidden name=aluno_cod value=$aluno><input type=submit value=Lançar Notas></td></form>\n");
 	}
 
 	function escreveEmpresaComDisponibilidade($firma, $num_estagios) {
-		printf("<td>$firma</td><td>$num_estagios</td><form action=\"apagar.php\" method=post><td><input type=hidden name=firma value=$firma><input type=submit value=Apagar></td></form><form action=\"alterar.php\" method=post><td><input type=hidden name=firma value=$firma><input type=submit value=Alterar></td></form>\n");
+		printf("<td>$firma</td><td>$num_estagios</td>\n");
 	}
 
-  function atribuirNota($nota_emp, $nota_esc, $nota_rel, $nota_proc) {
-	$nota_final = ($nota_emp + $nota_esc + $nota_rel + $nota_proc)/4; //calcula a média
-	$sql = "INSERT INTO estagio (nota_empresa, nota_escola, nota_relatorio, nota_procura, nota_final) VALUES ($nota_emp, $nota_esc, $nota_proc, $nota_final)";
-	$this->db_estagios->executarSQL($sql);
-  }
+	function atribuirNota($nota_emp, $nota_esc, $nota_rel, $nota_proc, $aluno_cod, $est_cod, $emp_cod) {
+		$nota_final = ($nota_emp + $nota_esc + $nota_rel + $nota_proc)/4; //calcula a média
+		$sql = "UPDATE estagio SET nota_empresa = $nota_emp, nota_escola = $nota_esc, nota_relatorio = $nota_rel, nota_procura = $nota_proc, nota_final = $nota_final)
+		WHERE aluno_id = $aluno_cod AND estabelecimento_empresa_id = $emp_cod AND estabelecimento_id = $est_cod";
+		$this->db_estagios->executarSQL($sql);
+	}
   
-  /**Corta a ligação à base de dados*/
-  function fecharBDEstagios() {
-    $this->db_estagios->fecharBD();
-  }
+	/**Corta a ligação à base de dados*/
+	function fecharBDEstagios() {
+		$this->db_estagios->fecharBD();
+	}
 }
 ?>

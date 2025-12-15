@@ -1,6 +1,6 @@
 <html>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-        <head><title>BD Loja - Introduzir</title>
+        <head><title>SIEstagios - Introduzir Aluno</title>
         </head>
     <body background=#ffffff>
         <?php

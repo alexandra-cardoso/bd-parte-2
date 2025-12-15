@@ -6,9 +6,12 @@
 
     <body>
         <h2> BEM-VINDO! </h2>
-        <form action=registarNotas.php>
-            <input type=submit value="REGISTAR Notas">
-        </form>
+        <?php
+            require('bd_estagios.php');
+            $estagios = new Estagio;
+            $estagios->Estagio();
+            $estagios->listarEstagiosFormador();
+        ?>
         <br>
         <a href="menu.html">voltar ao menu</a>
     </body>

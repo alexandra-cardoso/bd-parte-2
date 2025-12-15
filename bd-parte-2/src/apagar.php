@@ -1,21 +1,21 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-        <title>BD Loja - Apagar</title>
+        <title>SIEstágios - Apagar Estágio</title>
     </head>
     <body background=#ffffff>
-        <p><h3>Apagar produtos </h3></p>
+        <p><h3>Apagar estágio </h3></p>
 
         <?php
-        require('bdloja.php');
-        $produtos = new ProdutosLoja;
-        $produtos->ProdutosLoja();
-        $produtos->apagarProduto($_POST["codigo"]);
-        $produtos->fecharBDProdutos();
+        require('bd_estagios.php');
+        $estagios = new Estagio;
+        $estagios->Estagio();
+        $estagios->apagarEstagio($_POST["emp_cod"], $_POST["est_cod"], $_POST["aluno_cod"]);
+        $estagios->fecharBDEstagios();
         ?>
         
         <br>
-        Produto removido com sucesso!
+        Estágio removido com sucesso!
         <br><br>
         <a href="listar.php">voltar</a> | <a href="menu.html">voltar ao menu</a>
     </body>

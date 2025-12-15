@@ -11,7 +11,7 @@
             <input type=submit value="GERIR Estágios">
         </form>
 
-        <form action=introduzirAluno.php>
+        <form action=introduzirAluno.html>
             <input type=submit value="INTRODUZIR Aluno">
         </form>
         <br>

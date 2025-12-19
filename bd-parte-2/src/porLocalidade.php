@@ -10,8 +10,7 @@
             <p><h3>Listagem de empresas por Localidade</h3></p>
 
             <br>
-            <form action = "" method = "get"> 
-                Localidade:
+            <form action = "" method = "get"> Localidade:
                 <input type = "text" id = "localidade" name = "localidade">
                 <input type = "submit" value = "Pesquisar">
             </form>

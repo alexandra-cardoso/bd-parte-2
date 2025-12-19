@@ -1,0 +1,94 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+<head>
+    <title>SIEstágios</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            /* Usa a fonte moderna */
+            height: 100vh;
+            /* Ocupa 100% da altura do ecrã */
+
+            /* Aqui colocamos a tua imagem como fundo */
+            background-image: url('images/background.jpg');
+            background-size: cover;
+            /* Faz a imagem cobrir tudo sem distorcer */
+            background-position: center;
+            background-repeat: no-repeat;
+
+            /* Isto serve para centrar a caixa no meio do ecrã */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 2. Criar a "Caixa" (O Cartão Branco) */
+        .menu-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            /* Branco com 90% de opacidade */
+            padding: 40px;
+            border-radius: 15px;
+            /* Cantos arredondados */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            /* Sombra elegante */
+            text-align: center;
+            width: 300px;
+        }
+
+        /* Estilo do Título/Texto */
+        .menu-box h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        /* 3. Estilizar os Botões (Inputs) */
+        input[type="submit"] {
+            background-color: #e839bf;
+            color: white;
+            padding: 12px 20px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            /* Botão ocupa a largura toda da caixa */
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        /* Efeito ao passar o rato por cima do botão */
+        input[type="submit"]:hover {
+            background-color: #f505b5;
+            transform: scale(1.02);
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class=menu-box>
+        <h2> BEM-VINDO! </h2>
+        <form action=aluno.html>
+            <input type=submit value="ALUNO">
+        </form>
+
+        <form action=administrador.php>
+            <input type=submit value="ADMINISTRADOR">
+        </form>
+
+        <form action=formador.php>
+            <input type=submit value="FORMADOR">
+        </form>
+
+    </div>
+
+</body>
+
+</html>

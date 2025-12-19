@@ -16,18 +16,15 @@
 </head>
 
 <body>
-    <div class="menu-box">
-        <h2> Gestão de Estágios </h2>
-        <form method = "post" action="registarEstagio.php">
-            <input type=submit value="Adicionar Novo Estágio">
-        </form>
+    <h2> Gestão de Estágios </h2>
+    <form method = "post" action="registarEstagio.php">
+        <input type=submit value="Adicionar Novo Estágio">
+    </form>
 
-        <?php
-            $lista = $estagios->listarEstagios();
-        ?>
-
-    </div>
+    <?php
+        $lista = $estagios->listarEstagios();
+    ?>
     <br>
-    <a href="menu.html">voltar ao menu</a>
+    <a href="index.html">voltar ao menu</a>
 </body>
 </html>

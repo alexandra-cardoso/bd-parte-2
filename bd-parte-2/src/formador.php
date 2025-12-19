@@ -13,6 +13,6 @@
             $estagios->listarEstagiosFormador();
         ?>
         <br>
-        <a href="menu.html">voltar ao menu</a>
+        <a href="index.html">voltar ao menu</a>
     </body>
 </html>

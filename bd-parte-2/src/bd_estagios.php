@@ -83,7 +83,7 @@ class Estagio extends Estagios {
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveEstagio($row['nome_emp'], $row['nome_est'], $row['data_inicio'], $row['aluno_id'], $row['formador_id'], $row['nota_final']); //imprime se tambem a nota final para saber mais tarde se podemos alterar ou não
+			$this->escreveEstagio($row['nome_emp'], $row['nome_est'], $row['estabelecimento_id'], $row['estabelecimento_empresa_id'], $row['data_inicio'], $row['aluno_id'], $row['formador_id'], $row['nota_final']); //imprime se tambem a nota final para saber mais tarde se podemos alterar ou não
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
@@ -199,8 +199,8 @@ class Estagio extends Estagios {
 		printf("<td><a href='estagiosNaEmpresa.php?empresa_id=$emp_id'>$firma</td><td>$tipo</td><td>$localidade</td><td>$telefone</td><td>$website</td>\n");
 	}
 	
-	function escreveEstagio($id_est, $id_emp, $data_inicio, $aluno_id, $formador_id, $nota_final) { //este é chamado para o admin apenas. mostra os botões que permitem alterar e apagar estágios. cada estágio mostra as informações que o enunciado diz que é possível o admin alterar
-		printf("<td>Estabelecimento: $id_est</td><td>Empresa: $id_emp</td><td>Data de Início: '$data_inicio'</td><td>Aluno: $aluno_id</td><td> Formador: $formador_id</td>");
+	function escreveEstagio($nome_est, $nome_emp, $id_est, $id_emp, $data_inicio, $aluno_id, $formador_id, $nota_final) { //este é chamado para o admin apenas. mostra os botões que permitem alterar e apagar estágios. cada estágio mostra as informações que o enunciado diz que é possível o admin alterar
+		printf("<td>Estabelecimento: $nome_est</td><td>Empresa: $nome_emp</td><td>Data de Início: '$data_inicio'</td><td>Aluno: $aluno_id</td><td> Formador: $formador_id</td>");
 		if($nota_final == NULL || $nota_final == 0) { //apenas os estágios não terminados podem ser alterados/apagados
 			printf("<td><form action='' method=post><input type=hidden name=emp_cod value=$id_emp><input type=hidden name=est_cod value=$id_est><input type=hidden name=aluno_cod value=$aluno_id><input type=submit name=apagar value=Apagar></td></form><td><form action=\"alterarEstagio.php\" method=post><input type=hidden name=aluno_cod value=$aluno_id><input type=hidden name=emp_cod value=$id_emp><input type=hidden name=est_cod value=$id_est><input type=hidden name = data_ini value =$data_inicio><input type=submit value=Alterar></td></form>\n"); //para atualizar recebo a data de inicio alem das chaves primarias
 		}

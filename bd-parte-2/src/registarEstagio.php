@@ -14,21 +14,25 @@
     }
 ?>
 <html>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <head><title>SIEstágios - Introduzir Estágio</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>SIEstágios - Introduzir Estágio</title>
+        <link rel ="stylesheet" href="style.css">
     </head>
 
-    <body background=#fcbce6ff>
-        <p><h3>Registar novo estágio:</h3></p>
-        <form action = "registarEstagio.php" method=post>
-            ID do Estabelecimento: <input type=text name = estab_id><br>
-            ID da Empresa: <input type=text name = emp_id><br>
-            Data de Início do Estágio: <input type=text name = data_inicio><br>
-            ID do Aluno: <input type=text name = aluno_id><br>
-            ID do Formador: <input type=text name = formador_id><br>
-            <input type=submit name = salvar value = "Guardar Estágio">
-        </form>
-        <br>
-        <a href="gestao.php">voltar ao menu</a>
+    <body>
+        <div class = "box content-box">
+            <p><h3>Registar novo estágio:</h3></p>
+            <form action = "registarEstagio.php" method=post>
+                ID do Estabelecimento: <input type=text name = estab_id><br>
+                ID da Empresa: <input type=text name = emp_id><br>
+                Data de Início do Estágio: <input type=text name = data_inicio><br>
+                ID do Aluno: <input type=text name = aluno_id><br>
+                ID do Formador: <input type=text name = formador_id><br>
+                <input type=submit name = salvar value = "Guardar Estágio">
+            </form>
+            <br>
+            <a href="gestao.php">voltar ao menu</a>
+        </div>
     </body>
 </html>

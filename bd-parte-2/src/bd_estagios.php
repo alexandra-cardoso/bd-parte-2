@@ -39,8 +39,8 @@ class Estagios {
 }
 
 
-/**Esta classe implementa a gestão de produtos na base de dados dos Estagios. Permite
-efectuar toda uma série de operações sobre a tabela de produtos, nomeadamente
+/**Esta classe implementa a gestão de estagios na base de dados dos Estagios. Permite
+efectuar toda uma série de operações sobre a tabela de estagios, nomeadamente
 operações de introdução, remoção, consulta e alteração de estagios.*/
 
 class Estagio extends Estagios {

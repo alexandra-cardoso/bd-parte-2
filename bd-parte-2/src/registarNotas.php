@@ -30,24 +30,27 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
         <title>SIEstagios - Registar Notas</title>
+        <link rel ="stylesheet" href="style.css">
     </head>
-    <body background=#ffffff>
-        <p><h3>Adicionar Notas aos Estágios</h3></p>
-        <br>
-        <p><b>Aluno:</b> <?php echo $aluno_cod;?> | <b>Empresa:</b><?php echo $emp_cod;?> | <b>Estabelecimento:</b> <?php echo $est_cod;?></p>
-        <form action = "" method = post>
-            <input type = hidden name = aluno_cod value = <?php echo $aluno_cod;?>>
-            <input type = hidden name = emp_cod value = <?php echo $emp_cod;?>>
-            <input type = hidden name = est_cod value = <?php echo $est_cod;?>>
-            Nota da Empresa: <input type = "text" name = "nota_emp"><br>
-            Nota da Escola: <input type = "text" name = "nota_esc"><br>
-            Nota do Relatório: <input type = "text" name = nota_rel><br>
-            Nota da Procura: <input type = "text" name = nota_proc><br> 
+    <body>
+        <div class = "box content-box">
+            <p><h3>Adicionar Notas aos Estágios</h3></p>
             <br>
-            <input type = "submit" name = "botao" value = "Guardar Notas">
-        </form>
+            <p><b>Aluno:</b> <?php echo $aluno_cod;?> | <b>Empresa:</b><?php echo $emp_cod;?> | <b>Estabelecimento:</b> <?php echo $est_cod;?></p>
+            <form action = "" method = post>
+                <input type = hidden name = aluno_cod value = <?php echo $aluno_cod;?>>
+                <input type = hidden name = emp_cod value = <?php echo $emp_cod;?>>
+                <input type = hidden name = est_cod value = <?php echo $est_cod;?>>
+                Nota da Empresa: <input type = "text" name = "nota_emp"><br>
+                Nota da Escola: <input type = "text" name = "nota_esc"><br>
+                Nota do Relatório: <input type = "text" name = nota_rel><br>
+                Nota da Procura: <input type = "text" name = nota_proc><br> 
+                <br>
+                <input type = "submit" name = "botao" value = "Guardar Notas">
+            </form>
 
-        <br>
-        <a href="formador.php">voltar ao menu</a>
+            <br>
+            <a href="formador.php">voltar ao menu</a>
+        </div>
     </body>
 </html>

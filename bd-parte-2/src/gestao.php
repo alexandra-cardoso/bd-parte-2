@@ -9,22 +9,24 @@
 ?>
 
 <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>SIEstágios - Gestão de Estágios</title>
+        <link rel ="stylesheet" href="style.css">
+    </head>
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <title>Gestão de Estágios</title>
-</head>
+    <body>
+        <div class = "box content-box">
+            <h2> Gestão de Estágios </h2>
+            <form method = "post" action="registarEstagio.php">
+                <input type=submit value="Adicionar Novo Estágio">
+            </form>
 
-<body>
-    <h2> Gestão de Estágios </h2>
-    <form method = "post" action="registarEstagio.php">
-        <input type=submit value="Adicionar Novo Estágio">
-    </form>
-
-    <?php
-        $lista = $estagios->listarEstagios();
-    ?>
-    <br>
-    <a href="index.html">voltar ao menu</a>
-</body>
+            <?php
+                $lista = $estagios->listarEstagios();
+            ?>
+            <br>
+            <a href="index.html">voltar ao menu</a>
+        </div>
+    </body>
 </html>

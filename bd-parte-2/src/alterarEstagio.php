@@ -2,6 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <title>SIEstágios - Alterar Estágio</title>
+    <link rel ="stylesheet" href="style.css">
 </head>
 
 <?php
@@ -36,36 +37,37 @@
     }
 ?>
 
-<body style="background-color: #f6c0e9ff;"> 
-    <h2>Alterar um Estágio</h2>
-    
-    <form action="" method="post">
-        <input type = hidden name = old_aluno value = <?php echo $aluno_id;?>>
-        <input type = hidden name = old_emp value = <?php echo $emp_atual;?>>
-        <input type = hidden name = old_est value = <?php echo $est_atual;?>>
-
-        <label>Aluno ID:</label>
-        <?php echo $aluno_id; ?>
-        <br><br>
-
-        <label>Empresa:</label><br>
-        <input type=text name=nome_emp value=<?php echo $emp_atual; ?>>
-        <br/><br/>
-
-        <label>Estabelecimento:</label><br>
-        <input type=text name=nome_estab value=<?php echo $est_atual; ?>>
-        <br/><br/>
-
-        <label>Data de Início:</label><br>
-        <input type=date name=data_inicio value=<?php echo $data_atual; ?>>
-        <br/><br/>
-        <?php $estagios->fecharBDEstagios();?>
-
-        <input type="submit" name="atualizar" value="Alterar">
-        <input type="reset" name="limpar" value="Limpar">
+<body> 
+    <div class = "box content-box">
+        <h2>Alterar um Estágio</h2>
         
-        <a href="gestao.php"><input type="button" value=Cancelar></a>
-    </form>
+        <form action="" method="post">
+            <input type = hidden name = old_aluno value = <?php echo $aluno_id;?>>
+            <input type = hidden name = old_emp value = <?php echo $emp_atual;?>>
+            <input type = hidden name = old_est value = <?php echo $est_atual;?>>
 
+            <label>Aluno ID:</label>
+            <?php echo $aluno_id; ?>
+            <br><br>
+
+            <label>Empresa:</label><br>
+            <input type=text name=nome_emp value=<?php echo $emp_atual; ?>>
+            <br/><br/>
+
+            <label>Estabelecimento:</label><br>
+            <input type=text name=nome_estab value=<?php echo $est_atual; ?>>
+            <br/><br/>
+
+            <label>Data de Início:</label><br>
+            <input type=date name=data_inicio value=<?php echo $data_atual; ?>>
+            <br/><br/>
+            <?php $estagios->fecharBDEstagios();?>
+
+            <input type="submit" name="atualizar" value="Alterar">
+            <input type="reset" name="limpar" value="Limpar">
+            
+            <a href="gestao.php"><input type="button" value=Cancelar></a>
+        </form>
+    </div>
 </body>
 </html>

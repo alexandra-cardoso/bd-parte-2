@@ -200,7 +200,7 @@ class Estagio extends Estagios {
 	}
 	
 	function escreveEstagio($id_est, $id_emp, $data_inicio, $aluno_id, $formador_id, $nota_final) { //este é chamado para o admin apenas. mostra os botões que permitem alterar e apagar estágios. cada estágio mostra as informações que o enunciado diz que é possível o admin alterar
-		printf("<td>Estabelecimento: $id_est</td><td>Empresa: $id_emp</td><td>Data de Início: $data_inicio</td><td>Aluno: $aluno_id</td><td> Formador: $formador_id</td>");
+		printf("<td>Estabelecimento: $id_est</td><td>Empresa: $id_emp</td><td>Data de Início: '$data_inicio'</td><td>Aluno: $aluno_id</td><td> Formador: $formador_id</td>");
 		if($nota_final == NULL || $nota_final == 0) { //apenas os estágios não terminados podem ser alterados/apagados
 			printf("<td><form action='' method=post><input type=hidden name=emp_cod value=$id_emp><input type=hidden name=est_cod value=$id_est><input type=hidden name=aluno_cod value=$aluno_id><input type=submit name=apagar value=Apagar></td></form><td><form action=\"alterarEstagio.php\" method=post><input type=hidden name=aluno_cod value=$aluno_id><input type=hidden name=emp_cod value=$id_emp><input type=hidden name=est_cod value=$id_est><input type=hidden name = data_ini value =$data_inicio><input type=submit value=Alterar></td></form>\n"); //para atualizar recebo a data de inicio alem das chaves primarias
 		}

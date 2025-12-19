@@ -9,6 +9,11 @@
     $estagios = new Estagio;
     $estagios->Estagio();
 
+    $aluno_id = "";
+    $emp_atual = "";
+    $est_atual = "";
+    $data_atual = "";
+
     if (isset($_POST['atualizar'])) { //se submeter o pedido para atualizar
         $aluno_id = $_POST['old_aluno'];
         $old_emp = $_POST['old_emp'];
@@ -19,11 +24,16 @@
         $nova_data = $_POST['data_inicio'];
 
         $estagios->atualizarEstagio($aluno_id, $old_emp, $old_est, $novo_emp, $novo_est, $nova_data);
+
+        $emp_atual = $novo_emp;
+        $est_atual = $novo_est;
+        $data_atual = $nova_data;
+    } else if (isset($_POST['aluno_cod'])) { //se vier da pagina de gestao
+        $aluno_id = $_POST['aluno_cod'];
+        $emp_atual = $_POST['emp_cod'];
+        $est_atual = $_POST['est_cod'];
+        $data_atual = $_POST['data_ini'];
     }
-    $aluno_id = $_POST['aluno_cod'];
-    $emp_atual = $_POST['emp_cod'];
-    $est_atual = $_POST['est_cod'];
-    $data_atual = $_POST['data_ini'];
 ?>
 
 <body style="background-color: #f6c0e9ff;"> 

@@ -23,7 +23,7 @@
         $novo_est = $_POST['nome_estab'];
         $nova_data = $_POST['data_inicio'];
 
-        $estagios->atualizarEstagio($aluno_id, $old_emp, $old_est, $novo_emp, $novo_est, $nova_data);
+        $estagios->alterarEstagio($aluno_id, $old_emp, $old_est, $novo_est, $novo_emp, $nova_data);
 
         $emp_atual = $novo_emp;
         $est_atual = $novo_est;

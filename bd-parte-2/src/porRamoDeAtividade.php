@@ -24,7 +24,7 @@
             if(isset($_GET['ramo_atividade']) && $_GET['ramo_atividade'] != '')
                 $estagios -> listarEmpresasPorRamo($_GET['ramo_atividade']);
             else 
-                $estagios->listarEmpresas();
+                $estagios->listarEmpresasComDisponibilidade();
 
             $estagios->fecharBDEstagios();
             ?>

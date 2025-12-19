@@ -180,7 +180,7 @@ class Estagio extends Estagios {
 	function listarEmpresasPorLocalidade($localidade) { //o query mostra as empresas com disponibilidade por localidade
 		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
 		$ano = date("Y");
-		$result_set = $this->db_estagios->executarSQL("SELECT e.* 
+		$result_set = $this->db_estagios->executarSQL("SELECT * 
 		FROM empresa 
 		inner join disponibilidade d on e.empresa_id = d.empresa_id
 		WHERE localidade like '%$localidade%'

@@ -25,7 +25,7 @@
             if(isset($_GET['localidade']) && $_GET['localidade'] != '')
                 $estagios -> listarEmpresasPorLocalidade($_GET['localidade']);
             else 
-                $estagios->listarEmpresas();
+                $estagios->listarEmpresasComDisponibilidade();
 
             $estagios->fecharBDEstagios();
             ?>

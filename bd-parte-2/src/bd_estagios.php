@@ -161,10 +161,12 @@ class Estagio extends Estagios {
 
 	function listarEmpresasPorRamo($ramo_atividade) { // o query seleciona apenas as empresas daquele ramo de atividade 
 		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
-		$result_set = $this->db_estagios->executarSQL("SELECT * FROM ramo_atividade ra 
+		$ano = date("Y");
+		$result_set = $this->db_estagios->executarSQL("SELECT e.* FROM ramo_atividade ra 
 		inner join trabalha t on t.ramo_atividade_id = ra.ramo_atividade_id
 		inner join empresa e on e.empresa_id = t.empresa_id
-		WHERE ra.descricao like '%$ramo_atividade%'");
+		inner join disponibilidade d on e.empresa_id = d.empresa_id
+		WHERE ra.descricao like '%$ramo_atividade%' and d.ano = $ano and d.num_estagios>0");
 		$tuplos = mysqli_num_rows($result_set);
 
 		for($registo=0; $registo<$tuplos; $registo++) {
@@ -175,9 +177,14 @@ class Estagio extends Estagios {
 		echo "</table>\n";
 	}
 
-	function listarEmpresasPorLocalidade($localidade) {
+	function listarEmpresasPorLocalidade($localidade) { //o query mostra as empresas com disponibilidade por localidade
 		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
-		$result_set = $this->db_estagios->executarSQL("SELECT * FROM empresa WHERE localidade like '%$localidade%'");
+		$ano = date("Y");
+		$result_set = $this->db_estagios->executarSQL("SELECT e.* 
+		FROM empresa 
+		inner join disponibilidade d on e.empresa_id = d.empresa_id
+		WHERE localidade like '%$localidade%'
+		and d.ano = $ano");
 		$tuplos = mysqli_num_rows($result_set);
 
 		for($registo=0; $registo<$tuplos; $registo++) {

@@ -38,10 +38,23 @@ body {
     max-width: 900px;
 }
 
-/* Caixa PEQUENA (Para o Menu Principal - usar no menu.html) */
+/*caixa do menu principal*/
 .menu-box {
-    width: 300px;
-    margin: auto; /* Para centrar verticalmente se usares flex no body */
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 60px;               /* Aumentei de 40px para 60px (mais espaço à volta) */
+    border-radius: 20px;         /* Cantos mais redondos */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); /* Sombra mais imponente */
+    width: 500px;                /* Um pouco mais largo que o original, mas equilibrado */
+    margin: auto;
+}
+
+/* O Título "BEM-VINDO" */
+.menu-box h2 {
+    font-size: 32px;             /* Muito maior (antes era 18px) */
+    font-weight: 800;            /* Letra mais grossa */
+    margin-bottom: 40px;         /* Mais espaço entre o título e os botões */
+    letter-spacing: 1px;         /* Espacinho entre letras para ficar elegante */
+    text-transform: uppercase;
 }
 
 /* Títulos */
@@ -108,6 +121,27 @@ input[type="submit"], button, .btn {
 input[type="submit"]:hover, button:hover {
     background-color: #c21a99;
     transform: scale(1.02);
+}
+
+/* Os Botões do Menu (Só afeta os botões desta caixa) */
+.menu-box input[type="submit"] {
+    background-color: #e839bf;
+    color: white;
+    
+    padding: 20px 30px;          /* Botões muito mais altos e largos */
+    margin: 15px 0;              /* Mais espaço entre cada botão */
+    
+    font-size: 20px;             /* Letra do botão maior */
+    text-transform: uppercase;   /* Letras maiúsculas para dar impacto */
+    letter-spacing: 1px;
+    border-radius: 8px;
+}
+
+/* Efeito Hover nos botões do menu */
+.menu-box input[type="submit"]:hover {
+    background-color: #f505b5;
+    transform: scale(1.05);      /* Cresce ainda mais ao passar o rato */
+    box-shadow: 0 5px 15px rgba(232, 57, 191, 0.4); /* Brilho rosa à volta */
 }
 
 /* Botões Cinzentos (Limpar/Voltar) */

@@ -53,7 +53,7 @@ class Estagio extends Estagios {
 	}
  
 	function novoEstagio($empresa_id, $estabelecimento_id, $aluno_id, $formador_id, $data_inicio) {
-		$sql = "INSERT INTO estagio (estabelecimento_empresa_id, estabelecimento_id, aluno_id, formador_id, data_inicio) VALUES ($empresa_id, $estabelecimento_id, $aluno_id, $formador_id, $data_inicio)";
+		$sql = "INSERT INTO estagio (estabelecimento_empresa_id, estabelecimento_id, aluno_id, formador_id, data_inicio) VALUES ($empresa_id, $estabelecimento_id, $aluno_id, $formador_id, '$data_inicio')";
 		$this->db_estagios->executarSQL($sql);
 	}
 

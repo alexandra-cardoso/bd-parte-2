@@ -10,7 +10,7 @@
     $estagios->Estagio();
 
     if (isset($_POST['atualizar'])) { //se submeter o pedido para atualizar
-        $aluno_id = $_POST['aluno_cod'];
+        $aluno_id = $_POST['old_aluno'];
         $old_emp = $_POST['old_emp'];
         $old_est = $_POST['old_est'];
         

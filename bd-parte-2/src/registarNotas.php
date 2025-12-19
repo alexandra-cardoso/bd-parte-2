@@ -21,7 +21,7 @@
         $nota_rel = $_POST['nota_rel'];
         $nota_proc = $_POST['nota_proc'];
         //esta função grava as notas na bd e calcula a nota final por lá também
-        $estagios->atribuirNota($nota_emp, $nota_esc, $nota_rel, $nota_proc);
+        $estagios->atribuirNota($nota_emp, $nota_esc, $nota_rel, $nota_proc, $aluno_cod, $est_cod, $emp_cod);
         $estagios->fecharBDEstagios();
     }
 ?>

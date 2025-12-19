@@ -1,12 +1,11 @@
 <?php
-/**Esta classe gere as operações realizadas sobre uma base de dados de uma
-Loja virtual.*/
+/**Esta classe gere as operações realizadas sobre uma base de dados da gestão de Estágios virtual.*/
 
 class Estagios {
   /**Variável da classe que permite guardar a ligação à base de dados.*/
   var $conn;
 
-  /**Função para ligar à BD da Loja
+  /**Função para ligar à BD dos Estagios
    @return Um valor indicando qual o resultado da ligação à base de dados.*/
    function ligarBD() {
       $this->conn = mysqli_connect("mariadb", "root", "maria", "SIEstagios");
@@ -54,18 +53,18 @@ class Estagio extends Estagios {
 	}
  
 	function novoEstagio($empresa_id, $estabelecimento_id, $data_inicio, $aluno_id, $formador_id) {
-		$sql = "INSERT INTO estagio (estabelecimento_empresa_id, estabelecimento_id, aluno_id, formador_id) VALUES ($empresa_id, $estabelecimento_id, $aluno_id, $formador_id)";
+		$sql = "INSERT INTO estagio (estabelecimento_empresa_id, estabelecimento_id, aluno_id, formador_id, data_inicio) VALUES ($empresa_id, $estabelecimento_id, $aluno_id, $formador_id, $data_inicio)";
 		$this->db_estagios->executarSQL($sql);
 	}
 
 	function alterarEstagio($aluno_id, $old_emp, $old_est, $novo_est, $nova_emp, $nova_data) {
-		$sql = "UPDATE estagio SET estabelecimento_id = $novo_est, estabelecimento_empresa_id = $nova_emp, data_inicio = $nova_data)
-		WHERE aluno_id = $aluno_cod AND estabelecimento_empresa_id = $emp_cod AND estabelecimento_id = $est_cod";
+		$sql = "UPDATE estagio SET estabelecimento_id = $novo_est, estabelecimento_empresa_id = $nova_emp, data_inicio = '$nova_data' 
+		WHERE aluno_id = $aluno_cod AND estabelecimento_empresa_id = $old_emp AND estabelecimento_id = $old_est";
 		$this->db_estagios->executarSQL($sql);
 	}
  
 	function apagarEstagio($estabelecimento_empresa_id, $estabelecimento_id, $aluno_id) {
-		$sql = "DELETE FROM estagio WHERE estabelecimento_empresa_id = $estabelecimento_empresa_id AND estabelecimento_id = $estabelecimento_id AND aluno = $aluno_id";
+		$sql = "DELETE FROM estagio WHERE estabelecimento_empresa_id = $estabelecimento_empresa_id AND estabelecimento_id = $estabelecimento_id AND aluno_id = $aluno_id";
 		$this->db_estagios->executarSQL($sql);
 	}
 
@@ -84,7 +83,7 @@ class Estagio extends Estagios {
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveEstagio($row['nome_emp'], $row['nome_est'], $row['data_inicio'], $row['aluno_id'], $row['formador_id']); //colocar null naquilo que não queremos imprimir mas que está como atributo da fç escreveEstagio
+			$this->escreveEstagio($row['nome_emp'], $row['nome_est'], $row['data_inicio'], $row['aluno_id'], $row['formador_id'], $row['nota_final']); //imprime se tambem a nota final para saber mais tarde se podemos alterar ou não
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
@@ -146,14 +145,16 @@ class Estagio extends Estagios {
 
 	function listarEmpresasComDisponibilidade() {
 		echo "<table border=1 cellpadding=5 cellspacing=5>\n";
-		$result_set = $this->db_estagios->executarSQL("SELECT e.firma, d.num_estagios 
+		$ano_atual = date("Y");
+		$result_set = $this->db_estagios->executarSQL("SELECT e.*
 		FROM empresa e
-		INNER JOIN disponibilidade d ON e.empresa_id = d.empresa_id");
+		INNER JOIN disponibilidade d ON e.empresa_id = d.empresa_id
+		Where d.ano = $ano_atual And d.num_estagios > 0");
 		$tuplos = mysqli_num_rows($result_set); #só vão aparecer as linhas do resultado do sql
 		for($registo=0; $registo<$tuplos; $registo++) {
 			echo "<tr>\n";
 			$row = mysqli_fetch_assoc($result_set);
-			$this->escreveEmpresa($row["firma"], $row["num_estagios"]);
+			$this->escreveEmpresa($row["empresa_id"], $row["firma"], $row["tipo_organizacao"], $row["localidade"], $row["telefone"], $row["website"]); //imprime as informações pedidas, das empresas que têm disponibilidade
 			echo "</tr>\n";    }
 		echo "</table>\n";
 	}
@@ -191,8 +192,11 @@ class Estagio extends Estagios {
 		printf("<td><a href='estagiosNaEmpresa.php?empresa_id=$emp_id'>$firma</td><td>$tipo</td><td>$localidade</td><td>$telefone</td><td>$website</td>\n");
 	}
 	
-	function escreveEstagio($id_est, $id_emp, $data_inicio, $aluno_id, $formador_id) { //este é chamado para o admin apenas. mostra os botões que permitem alterar e apagar estágios. cada estágio mostra as informações que o enunciado diz que é possível o admin alterar
-		printf("<td>Estabelecimento: $id_est</td><td>Empresa: $id_emp</td><td>Data de Início: $data_inicio</td><td>Aluno: $aluno_id</td><td> Formador: $formador_id</td><td><form action='' method=post><input type=hidden name=emp_cod value=$id_emp><input type=hidden name=est_cod value=$id_est><input type=hidden name=aluno_cod value=$aluno_id><input type=submit name=apagar value=Apagar></td></form><td><form action=\"forms_estagio.php\" method=post><input type=hidden name=aluno_cod value=$aluno_id><input type=hidden name=emp_cod value=$id_emp><input type=hidden name=est_cod value=$id_est><input type=hidden name = data_ini value =$data_inicio><input type=submit value=Alterar></td></form>\n"); //para atualizar recebo a data de inicio alem das chaves primarias
+	function escreveEstagio($id_est, $id_emp, $data_inicio, $aluno_id, $formador_id, $nota_final) { //este é chamado para o admin apenas. mostra os botões que permitem alterar e apagar estágios. cada estágio mostra as informações que o enunciado diz que é possível o admin alterar
+		printf("<td>Estabelecimento: $id_est</td><td>Empresa: $id_emp</td><td>Data de Início: $data_inicio</td><td>Aluno: $aluno_id</td><td> Formador: $formador_id</td>");
+		if($nota_final == NULL || $nota_final == 0) { //apenas os estágios não terminados podem ser alterados/apagados
+			printf("<td><form action='' method=post><input type=hidden name=emp_cod value=$id_emp><input type=hidden name=est_cod value=$id_est><input type=hidden name=aluno_cod value=$aluno_id><input type=submit name=apagar value=Apagar></td></form><td><form action=\"forms_estagio.php\" method=post><input type=hidden name=aluno_cod value=$aluno_id><input type=hidden name=emp_cod value=$id_emp><input type=hidden name=est_cod value=$id_est><input type=hidden name = data_ini value =$data_inicio><input type=submit value=Alterar></td></form>\n"); //para atualizar recebo a data de inicio alem das chaves primarias
+		}
 	}
 
 	function escreveEstagioDaEmpresa($nome_estab, $morada_estab, $localidade_estab, $nome_resp, $cargo_resp, $telefone_resp, $email_resp, $nome_emp, $ramo_emp, $morada_emp, $local_emp, $telefone_emp, $transportes) { //chamado para o aluno, que vê o estagio muito detalhado
@@ -209,7 +213,8 @@ class Estagio extends Estagios {
 
 	function atribuirNota($nota_emp, $nota_esc, $nota_rel, $nota_proc, $aluno_cod, $est_cod, $emp_cod) {
 		$nota_final = ($nota_emp + $nota_esc + $nota_rel + $nota_proc)/4; //calcula a média
-		$sql = "UPDATE estagio SET nota_empresa = $nota_emp, nota_escola = $nota_esc, nota_relatorio = $nota_rel, nota_procura = $nota_proc, nota_final = $nota_final)
+		$data = date("Y-m-d"); //vai colocar, alem das notas, a data_final
+		$sql = "UPDATE estagio SET nota_empresa = $nota_emp, nota_escola = $nota_esc, nota_relatorio = $nota_rel, nota_procura = $nota_proc, nota_final = $nota_final, data_fim = '$data'
 		WHERE aluno_id = $aluno_cod AND estabelecimento_empresa_id = $emp_cod AND estabelecimento_id = $est_cod";
 		$this->db_estagios->executarSQL($sql);
 	}

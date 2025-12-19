@@ -10,7 +10,7 @@
         $aluno_id = $_POST['aluno_id'];
         $formador_id = $_POST['formador_id'];
 
-        $estagios->novoEstagio($id_estab, $id_emp, $data_inicio, $aluno_id, $formador_id);
+        $estagios->novoEstagio($id_emp, $id_estab, $data_inicio, $aluno_id, $formador_id);
     }
 ?>
 <html>

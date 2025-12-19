@@ -9,7 +9,7 @@
 
         $produtos = new Estagio;
         $produtos->Estagio();
-        $produtos->listarEmpresas();
+        $produtos->listarEmpresasPorDisponibilidade(); //para o aluno, aparecem as empresas que têm disponibilidade
         $produtos->fecharBDEstagios();
         ?>
         <br>

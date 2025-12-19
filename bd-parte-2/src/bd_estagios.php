@@ -184,7 +184,7 @@ class Estagio extends Estagios {
 		FROM empresa e
 		inner join disponibilidade d on e.empresa_id = d.empresa_id
 		WHERE localidade like '%$localidade%'
-		and d.ano = $ano");
+		and d.ano = $ano and d.num_estagios>0");
 		$tuplos = mysqli_num_rows($result_set);
 
 		for($registo=0; $registo<$tuplos; $registo++) {

@@ -10,7 +10,7 @@
         $aluno_id = $_POST['aluno_id'];
         $formador_id = $_POST['formador_id'];
 
-        $estagios->novoEstagio($id_emp, $id_estab, $aluno_id, $formador_id, $data_inicial);
+        $estagios->novoEstagio($id_emp, $id_estab, $aluno_id, $formador_id, $data_inicio);
     }
 ?>
 <html>
@@ -26,7 +26,7 @@
             <form action = "registarEstagio.php" method=post>
                 ID do Estabelecimento: <input type=text name ="estab_id"><br>
                 ID da Empresa: <input type=text name ="emp_id"><br>
-                Data de Início do Estágio: <input type=text name ="data_inicial"><br>
+                Data de Início do Estágio: <input type=date name ="data_inicial"><br>
                 ID do Aluno: <input type=text name ="aluno_id"><br>
                 ID do Formador: <input type=text name ="formador_id"><br>
                 <input type=submit name = salvar value = "Guardar Estágio">

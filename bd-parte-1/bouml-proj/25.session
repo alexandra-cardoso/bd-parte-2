@@ -1,0 +1,12 @@
+window_sizes 1920 991 450 1464 809 128
+
+diagrams
+  active  classdiagram_ref 128025 // ProjFinal
+    1418 824 90 A1 6 0
+end
+show_stereotypes
+selected class_ref 128537 // Estagio
+open
+  classview_ref 128025 // ProjFinal
+end
+end

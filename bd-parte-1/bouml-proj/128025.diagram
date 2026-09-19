@@ -1,0 +1,179 @@
+format 224
+
+classcanvas 128025 class_ref 128153 // Aluno
+  classdiagramsettings member_max_width 0 end
+  xyz 328.9 238.2 2000
+end
+classcanvas 128153 class_ref 128281 // Curso
+  classdiagramsettings member_max_width 0 end
+  xyz 789 215.5 2000
+end
+classcanvas 128409 class_ref 128409 // Turma
+  classdiagramsettings member_max_width 0 end
+  xyz 548.6 218.3 2000
+end
+classcanvas 128537 class_ref 129305 // AnoLetivo
+  classdiagramsettings member_max_width 0 end
+  xyz 763 408.3 2000
+end
+classcanvas 128665 class_ref 128025 // Empresa
+  classdiagramsettings member_max_width 0 end
+  xyz 76 324.6 2000
+end
+classcanvas 128793 class_ref 128793 // RamoDeAtividade
+  classdiagramsettings member_max_width 0 end
+  xyz 367 363.2 2000
+end
+classcanvas 128921 class_ref 128921 // Estabelecimento
+  classdiagramsettings member_max_width 0 end
+  xyz 574.3 546.9 2000
+end
+classcanvas 129049 class_ref 129049 // Produto
+  classdiagramsettings member_max_width 0 end
+  xyz 263.5 591.9 2000
+end
+classcanvas 129177 class_ref 129177 // Responsavel
+  classdiagramsettings member_max_width 0 end
+  xyz 107 599.6 2000
+end
+classcanvas 129305 class_ref 128665 // Formador
+  classdiagramsettings member_max_width 0 end
+  xyz 723 95.3 2000
+end
+classcanvas 129433 class_ref 128537 // Estagio
+  classdiagramsettings member_max_width 0 end
+  xyz 43.3 51.3 2000
+end
+classcanvas 129689 class_ref 129433 // User
+  classdiagramsettings member_max_width 0 end
+  xyz 500 84 2000
+end
+classcanvas 130713 class_ref 136089 // Administrativo
+  classdiagramsettings member_max_width 0 end
+  xyz 348 104 2000
+end
+classcanvas 130969 class_ref 142617 // TipoEstabelecimento
+  classdiagramsettings member_max_width 0 end
+  xyz 591.5 412 2000
+end
+classcanvas 131097 class_ref 142745 // zona
+  classdiagramsettings member_max_width 0 end
+  xyz 886.1 456.5 2000
+end
+classcanvas 131225 class_ref 142873 // transporte
+  classdiagramsettings member_max_width 0 end
+  xyz 885.1 611.6 2000
+end
+classcanvas 131353 class_ref 143001 // TipoTransporte
+  classdiagramsettings member_max_width 0 end
+  xyz 908.9 748.8 2000
+end
+relationcanvas 129817 relation_ref 128153 // <generalisation>
+  decenter_begin 620
+  decenter_end 893
+  from ref 128025 z 2001 to point 421.6 179.4
+  line 134041 z 2001 to ref 129689
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130841 relation_ref 134937 // <generalisation>
+  from ref 130713 z 2001 to ref 129689
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 131481 relation_ref 141465 // ano_estabelecimento
+  from ref 128921 z 2001 label "ano_estabelecimento" italic max_width 255 xyz 729 510.5 2001 to ref 128537
+  no_role_a no_role_b
+  multiplicity_a_pos 755 483 3000 multiplicity_b_pos 714 533 3000
+end
+relationcanvas 131609 relation_ref 141593 // responsavel_estabelecimento
+  decenter_begin 731
+  decenter_end 714
+  from ref 129177 z 2001 label "responsavel_estabelecimento" italic max_width 255 xyz 319.5 723 3000 to ref 128921
+  no_role_a no_role_b
+  multiplicity_a_pos 549 714 3000 multiplicity_b_pos 251 721 3000
+end
+relationcanvas 131737 relation_ref 141721 // estagio_responsavel
+  decenter_begin 46
+  from ref 129433 z 2001 label "estagio_responsavel" italic max_width 255 xyz 62.5 580 3000 to point 49.6 588
+  line 131865 z 2001 to ref 129177
+  no_role_a no_role_b
+  multiplicity_a_pos 85 644 3000 multiplicity_b_pos 11 230 3000
+end
+relationcanvas 132121 relation_ref 141977 // ramo_atividade_empresa
+  decenter_end 388
+  from ref 128665 z 2001 label "ramo_atividade_empresa" italic max_width 255 xyz 271 447 3000 to ref 128793
+  no_role_a no_role_b
+  multiplicity_a_pos 328 394 3000 multiplicity_b_pos 263 429 3000
+end
+relationcanvas 132249 relation_ref 142105 // produto_estabelecimento
+  decenter_begin 550
+  decenter_end 340
+  from ref 129049 z 2001 label "produto_estabelecimento" italic max_width 255 xyz 410.5 610 2001 to ref 128921
+  no_role_a no_role_b
+  multiplicity_a_pos 549 634 3000 multiplicity_b_pos 407 636 3000
+end
+relationcanvas 132377 relation_ref 142233 // empresa_estabelecimento
+  decenter_begin 893
+  decenter_end 82
+  from ref 128665 z 2001 label "empresa_estabelecimento" italic max_width 255 xyz 371 522.5 3000 to ref 128921
+  no_role_a no_role_b
+  multiplicity_a_pos 532 580 3000 multiplicity_b_pos 263 533 3000
+end
+relationcanvas 132505 relation_ref 142361 // estagio_aluno
+  from ref 129433 z 2001 label "estagio_aluno" italic max_width 255 xyz 221.5 159.5 3000 to ref 128025
+  no_role_a no_role_b
+  multiplicity_a_pos 306 255 3000 multiplicity_b_pos 173 180 3000
+end
+relationcanvas 133145 relation_ref 142617 // aluno_turma
+  from ref 128409 z 2001 label "aluno_turma" italic max_width 255 xyz 463 240.5 3000 to ref 128025
+  no_role_a no_role_b
+  multiplicity_a_pos 459 276 3000 multiplicity_b_pos 528 272 3000
+end
+relationcanvas 133273 relation_ref 142745 // turma_curso
+  from ref 128153 z 2001 label "turma_curso" italic max_width 255 xyz 685.5 234.5 3000 to ref 128409
+  no_role_a no_role_b
+  multiplicity_a_pos 670 267 3000 multiplicity_b_pos 766 266 3000
+end
+relationcanvas 133401 relation_ref 142873 // tipo_estabelecimento
+  from ref 128921 z 2001 label "tipo_estabelecimento" italic max_width 255 xyz 601 491.5 3000 to ref 130969
+  no_role_a no_role_b
+  multiplicity_a_pos 644 469 3000 multiplicity_b_pos 641 533 3000
+end
+relationcanvas 133529 relation_ref 143001 // <generalisation>
+  from ref 129305 z 2001 to ref 129689
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 133785 relation_ref 143129 // estagio_formador
+  decenter_begin 75
+  from ref 129433 z 2001 label "estagio_formador" italic max_width 255 xyz 411 51 3000 to point 760.6 62.2
+  line 133913 z 2001 to ref 129305
+  no_role_a no_role_b
+  multiplicity_a_pos 745 76 3000 multiplicity_b_pos 172 77 3000
+end
+relationcanvas 134169 relation_ref 143257 // transporte_zona
+  from ref 131097 z 2001 label "transporte_zona" italic max_width 255 xyz 926 569 2001 to ref 131225
+  no_role_a no_role_b
+  multiplicity_a_pos 950 592 3000 multiplicity_b_pos 932 547 3000
+end
+relationcanvas 134297 relation_ref 143385 // tipo_transporte
+  decenter_end 529
+  from ref 131225 z 2001 label "tipo_transporte" italic max_width 255 xyz 927 697 3000 to ref 131353
+  no_role_a no_role_b
+  multiplicity_a_pos 953 729 3000 multiplicity_b_pos 950 685 3000
+end
+relationcanvas 134681 relation_ref 150169 // listado_por
+  from ref 131097 z 2001 label "listado_por" italic max_width 255 xyz 772 545.5 2001 to ref 128921
+  no_role_a no_role_b
+  multiplicity_a_pos 760 612 3000 multiplicity_b_pos 868 542 3000
+end
+relationcanvas 134937 relation_ref 156697 // estagio_estabelecimento
+  decenter_end 48
+  from ref 129433 z 2001 label "estagio_estabelecimento" italic max_width 255 xyz 371 324.5 3000 to point 346 344
+  line 135065 z 2001 to point 540 344
+  line 135193 z 2001 to ref 128921
+  no_role_a no_role_b
+  multiplicity_a_pos 557 533 3000 multiplicity_b_pos 173 206 3000
+end
+end
